@@ -10,3 +10,4 @@ scalacOptions := Seq(
 )
 
 libraryDependencies += "com.typesafe" % "config" % "1.4.2"
+libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.8.0"

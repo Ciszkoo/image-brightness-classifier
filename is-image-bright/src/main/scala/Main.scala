@@ -1,5 +1,8 @@
+import Photos._
 import Properties._
 
 @main
 def app: Unit =
-  println(cutOffPoint)
+  val input = Photos.photosToEvaluate(Photos(inputPath))
+  val readed = input.foreach(Photos.savePhoto)
+  // println(input)
