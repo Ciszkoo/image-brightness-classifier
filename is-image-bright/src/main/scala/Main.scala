@@ -1,8 +1,10 @@
-import Photos._
+import Files._
 import Properties._
+import PhotoEvaluating._
 
 @main
 def app: Unit =
-  val input = Photos.photosToEvaluate(Photos(inputPath))
-  val readed = input.foreach(Photos.savePhoto)
-  // println(input)
+  val files = Files(inputPath)
+  val listOfFiles = photosToEvaluate(files)
+  
+  val readed = listOfFiles.foreach(evaluating)

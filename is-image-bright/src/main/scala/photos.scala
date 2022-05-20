@@ -3,18 +3,30 @@ import java.io.File
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
-case class Photos(path: String)
+case class Files(path: String)
 
-object Photos:
-    def photosToEvaluate(obj: Photos): List[File] =
+object Files:
+    def photosToEvaluate(obj: Files): List[File] =
         val dir = File(obj.path)
         dir.listFiles.toList
 
-    def readPhoto(photo: File): BufferedImage =
-        ImageIO.read(photo)
-    
-    def savePhoto(photo: File): Unit =
+        
+trait PhotoEvaluatingInterface:
+    def readPhoto(img: File): BufferedImage
+    def savePhoto(img: File): Unit
+    def evaluating(img: File): Unit
+
+
+object PhotoEvaluating extends PhotoEvaluatingInterface:
+    def readPhoto(img: File): BufferedImage =
+        ImageIO.read(img)
+
+    def savePhoto(img: File): Unit =
         os.copy.into(
-            os.Path(photo.toString),
+            os.Path(img.toString),
             os.Path(outputPath)
         )
+
+    def evaluating(img: File): Unit =
+        val photo = readPhoto(img)
+        savePhoto(img)
