@@ -16,6 +16,7 @@ trait PhotoEvaluatingInterface:
     def savePhoto(img: File): Unit
     def listOfPixels(img: BufferedImage): List[Int]
     def listOfLightness(pixels: List[Int]): List[Double]
+    def avgLightness(pixels: List[Double]): Int
     def evaluating(img: File): Unit
 
 
@@ -42,9 +43,12 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
             val bluePrim: Double = blue.toDouble / 255
             (List(redPrim, greenPrim, bluePrim).max + List(redPrim, greenPrim, bluePrim).min) / 2
         })
+    
+    def avgLightness(pixels: List[Double]): Int =
+        100 - ((pixels.sum / pixels.length.toDouble) * 100).floor.toInt
 
     def evaluating(img: File): Unit =
         val photo = readPhoto(img)
         val pixels = listOfLightness(listOfPixels(photo))
-        // val lightness 
+        val lightness = avgLightness(pixels)
         savePhoto(img)
