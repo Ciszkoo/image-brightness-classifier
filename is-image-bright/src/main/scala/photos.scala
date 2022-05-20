@@ -14,6 +14,7 @@ object Files:
 trait PhotoEvaluatingInterface:
     def readPhoto(img: File): BufferedImage
     def savePhoto(img: File): Unit
+    def listOfPixels(img: BufferedImage): List[Int]
     def evaluating(img: File): Unit
 
 
@@ -26,7 +27,12 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
             os.Path(img.toString),
             os.Path(outputPath)
         )
+    
+    def listOfPixels(img: BufferedImage): List[Int] =
+        img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth()).toList
+
 
     def evaluating(img: File): Unit =
         val photo = readPhoto(img)
+        val pixels = listOfPixels(photo)
         savePhoto(img)
