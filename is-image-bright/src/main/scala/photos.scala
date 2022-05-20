@@ -13,7 +13,7 @@ object Files:
         
 trait PhotoEvaluatingInterface:
     def readPhoto(img: File): BufferedImage
-    def savePhoto(img: File): Unit
+    def savePhoto(img: File, lightness: Int): Unit
     def listOfPixels(img: BufferedImage): List[Int]
     def listOfLightness(pixels: List[Int]): List[Double]
     def avgLightness(pixels: List[Double]): Int
@@ -24,10 +24,16 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
     def readPhoto(img: File): BufferedImage =
         ImageIO.read(img)
 
-    def savePhoto(img: File): Unit =
-        os.copy.into(
+    def savePhoto(img: File, lightness: Int): Unit =
+        val fileName = img.toString.split("\\\\").last
+        val newName = if (lightness < cutOffPoint) {
+            s"${fileName.split("\\.").head}_bright_${lightness}.${fileName.split("\\.").last}"
+        } else {
+            s"${fileName.split("\\.").head}_dark_${lightness}.${fileName.split("\\.").last}"
+        }
+        os.copy(
             os.Path(img.toString),
-            os.Path(outputPath)
+            os.Path(s"${outputPath}/${newName}")
         )
     
     def listOfPixels(img: BufferedImage): List[Int] =
@@ -51,4 +57,4 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
         val photo = readPhoto(img)
         val pixels = listOfLightness(listOfPixels(photo))
         val lightness = avgLightness(pixels)
-        savePhoto(img)
+        savePhoto(img, lightness)
