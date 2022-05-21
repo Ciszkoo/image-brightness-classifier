@@ -7,4 +7,4 @@ def app: Unit =
   val files = Files(inputPath)
   val listOfFiles = photosToEvaluate(files)
   
-  val readed = listOfFiles.foreach(evaluating)
+  val readed = listOfFiles.foreach(evaluate)

@@ -11,3 +11,4 @@ scalacOptions := Seq(
 
 libraryDependencies += "com.typesafe" % "config" % "1.4.2"
 libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.8.0"
+libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4"

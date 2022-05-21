@@ -2,22 +2,24 @@ import Properties._
 import java.io.File
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.ParSeq
 
 case class Files(path: String)
 
 object Files:
-    def photosToEvaluate(obj: Files): List[File] =
+    def photosToEvaluate(obj: Files): ParSeq[File] =
         val dir = File(obj.path)
-        dir.listFiles.toList
+        dir.listFiles.toSeq.par
 
         
 trait PhotoEvaluatingInterface:
     def readPhoto(img: File): BufferedImage
     def savePhoto(img: File, lightness: Int): Unit
-    def listOfPixels(img: BufferedImage): List[Int]
-    def listOfLightness(pixels: List[Int]): List[Double]
-    def avgLightness(pixels: List[Double]): Int
-    def evaluating(img: File): Unit
+    def listOfPixels(img: BufferedImage): ParSeq[Int]
+    def listOfLightness(pixels: ParSeq[Int]): ParSeq[Double]
+    def avgLightness(pixels: ParSeq[Double]): Int
+    def evaluate(img: File): Unit
 
 
 object PhotoEvaluating extends PhotoEvaluatingInterface:
@@ -36,10 +38,10 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
             os.Path(s"${outputPath}/${newName}")
         )
     
-    def listOfPixels(img: BufferedImage): List[Int] =
-        img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth()).toList
+    def listOfPixels(img: BufferedImage): ParSeq[Int] =
+        img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth()).toSeq.par
 
-    def listOfLightness(pixels: List[Int]): List[Double] =
+    def listOfLightness(pixels: ParSeq[Int]): ParSeq[Double] =
         pixels.map(pixel => {
             val red = (pixel & 0xff0000) / 65536
             val green = (pixel & 0xff00) / 256
@@ -50,10 +52,10 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
             (List(redPrim, greenPrim, bluePrim).max + List(redPrim, greenPrim, bluePrim).min) / 2
         })
     
-    def avgLightness(pixels: List[Double]): Int =
+    def avgLightness(pixels: ParSeq[Double]): Int =
         100 - ((pixels.sum / pixels.length.toDouble) * 100).floor.toInt
 
-    def evaluating(img: File): Unit =
+    def evaluate(img: File): Unit =
         val photo = readPhoto(img)
         val pixels = listOfLightness(listOfPixels(photo))
         val lightness = avgLightness(pixels)
