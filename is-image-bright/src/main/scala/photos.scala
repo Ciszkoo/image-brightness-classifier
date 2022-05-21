@@ -2,6 +2,7 @@ import Properties._
 import java.io.File
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import java.awt.Color
 import scala.collection.parallel.CollectionConverters._
 import scala.collection.parallel.ParSeq
 
@@ -43,13 +44,11 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
 
     def listOfLightness(pixels: ParSeq[Int]): ParSeq[Double] =
         pixels.map(pixel => {
-            val red = (pixel & 0xff0000) / 65536
-            val green = (pixel & 0xff00) / 256
-            val blue = pixel & 0xff
-            val redPrim: Double = red.toDouble / 255
-            val greenPrim: Double = green.toDouble / 255
-            val bluePrim: Double = blue.toDouble / 255
-            (List(redPrim, greenPrim, bluePrim).max + List(redPrim, greenPrim, bluePrim).min) / 2
+            val c = Color(pixel)
+            val red = c.getRed().toDouble / 255
+            val green = c.getGreen().toDouble / 255
+            val blue = c.getBlue().toDouble / 255
+            (List(red, green, blue).max + List(red, green, blue).min) / 2
         })
     
     def avgLightness(pixels: ParSeq[Double]): Int =
