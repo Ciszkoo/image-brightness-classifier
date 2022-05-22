@@ -54,7 +54,8 @@ object PhotoEvaluating extends PhotoEvaluatingInterface:
         })
     
     protected def avgLightness(pixels: ParSeq[Double]): Int =
-        100 - ((pixels.sum / pixels.length.toDouble) * 100).floor.toInt
+        val average = pixels.foldLeft((0.0, 1))((acc, i) => ((acc._1 + (i - acc._1) / acc._2), acc._2 + 1))._1
+        100 - (average * 100).floor.toInt
 
     def evaluate(img: File): Unit =
         val photo = readPhoto(img)
