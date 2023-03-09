@@ -1,3 +1,3 @@
-# recruitment-task
+# recruitment-task-scalac
 
-Program wczytuje zdjęcia z folderu podanego w pliku 'applicaton.conf', w nim również znajduje się wartość graniczna do oceny jasności. Ocenia odpowiednio wszystkie zdjęcia załączone do zadania. Aplikację uruchamia sbt run.
+App read images from directory specified in 'application.conf' file and evaluate their lightness.
