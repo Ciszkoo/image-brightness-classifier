@@ -1,4 +1,4 @@
-import com.typesafe.config._
+import com.typesafe.config.*
 
 object Properties {
   private val conf        = ConfigFactory.load()
